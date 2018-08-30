@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="renderer" content="webkit">
+<title></title>
+<link rel="stylesheet" href="css/pintuer.css">
+<link rel="stylesheet" href="css/admin.css">
+<script src="js/jquery.js"></script>
+<script src="js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head"><strong class="icon-reorder"> 内容列表</strong></div>
+  <div class="padding border-bottom">  
+  <button type="button" class="button border-yellow" onclick="window.location.href='#add'"><span class="icon-plus-square-o"></span> 添加内容</button>
+  </div>
+  <table class="table table-hover text-center">
+    <thead>
+    <tr>
+      <th width="10%">ID</th>
+      <th width="20%">图片</th>
+      <th width="15%">名称</th>
+      <th width="20%">描述</th>
+      <th width="10%">排序</th>
+      <th width="15%">操作</th>
+    </tr>
+    </thead>
+    <tbody class="bannerBody">
+    <tr>
+      <td>1</td>
+      <td><img src="images/11.jpg" alt="" width="120" height="50" /></td>
+      <td>首页焦点图</td>
+      <td>描述文字....</td>
+      <td>1</td>
+      <td><div class="button-group">
+        <a class="button border-main" href="#add"><span class="icon-edit"></span> 修改</a>
+        <a class="button border-red" href="javascript:void(0)" onclick="return del(1,1)"><span class="icon-trash-o"></span> 删除</a>
+      </div></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><img src="images/11.jpg" alt="" width="120" height="50" /></td>
+      <td>首页焦点图</td>
+      <td>描述文字....</td>
+      <td>1</td>
+      <td><div class="button-group">
+        <a class="button border-main" href="#add"><span class="icon-edit"></span> 修改</a>
+        <a class="button border-red" href="javascript:void(0)" onclick="return del(1,1)"><span class="icon-trash-o"></span> 删除</a>
+      </div></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><img src="images/11.jpg" alt="" width="120" height="50" /></td>
+      <td>首页焦点图</td>
+      <td>描述文字....</td>
+      <td>1</td>
+      <td><div class="button-group">
+        <a class="button border-main" href="#add"><span class="icon-edit"></span> 修改</a>
+        <a class="button border-red" href="javascript:void(0)" onclick="return del(1,1)"><span class="icon-trash-o"></span> 删除</a>
+      </div></td>
+    </tr>
+
+    </tbody>
+   
+
+  </table>
+</div>
+<div class="panel admin-panel margin-top" id="add">
+  <div class="panel-head"><strong><span class="icon-pencil-square-o"></span> 增加内容</strong></div>
+  <div class="body-content">
+    <form method="post" class="form-x" id="ajaxForm" action="" enctype="multipart/form-data">
+      <div class="form-group">
+        <div class="label">
+          <label>名称：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" value="" name="name" placeholder="请输入名称" />
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>图片：</label>
+        </div>
+        <div class="field">
+          <input type="text" id="url1" name="img" class="input tips" style="width:25%; float:left;"  value="" data-toggle="hover" data-place="right" data-image="" />
+          <input type="button" class="button bg-blue margin-left" id="image1" value="+ 浏览上传"  style="float:left;">
+          <div class="tipss">图片尺寸：(宽>=1920 高>=500)</div>
+          <div class="hidden">
+            <input type="file" id="picture">
+          </div>
+        </div>
+      </div>
+      <div class="form-group hidden" id="hiddenImg">
+        <div class="label">
+          <label>预览:</label>
+        </div>
+        <div class="filed">
+          <img src="" width="200" height="100" id="imgsrc">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>描述：</label>
+        </div>
+        <div class="field">
+          <textarea type="text" class="input" name="description" style="height:120px;" value=""></textarea>
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>排序：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="sort" value="1"  data-validate="required:,number:排序必须为数字" />
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" type="submit"> 提交</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  $(function () {
+      $("#image1").click(function () {
+          $("#picture").trigger("click");
+      });
+      $("#picture").change(function () {
+          var theFile = $(this)[0].files[0];
+          $("#url1").val($(this).val());
+          $("#hiddenImg").removeClass("hidden");
+          var read = new FileReader();
+          read.readAsDataURL(this.files[0]);
+          read.onload = function () {
+              url = read.result;
+              $("#imgsrc").attr("src",url);
+          }
+      });
+
+          $("#ajaxForm").submit(function () {
+              var name = $("input[name='name']").val();
+              var description= $("textarea[name='description']").val();
+              var sort = $("input[name='sort']").val();
+              var fd = new FormData();
+              var file = $('#picture')[0].files[0];
+              if(file.size > 1048576){
+                  alert('文件太大，超过1M限制');
+                  return false;
+              }
+              fd.append("file",file);
+              fd.append("name",name);
+              fd.append("description",description);
+              fd.append("order",sort);
+              $.ajax({
+                  url:'http://localhost:19303/banner/add',
+                  type:'POST',
+                  data:fd,
+                  processData:false,
+                  contentType:false,
+                  dataType:"json",
+                  async:false,
+                  success:function (result) {
+                      if(result.code == "success"){
+                          alert("上传成功");
+                          window.location.reload();
+                      }else {
+                          alert(result.message);
+                      }
+                  }
+
+              });
+              return false;
+          })
+      $.getJSON("http://localhost:19303/banner/list",function (result) {
+          if(result.code =="success"){
+              var strJsonArray = result.data;
+//              var jsonArray = $.parseJSON(strJsonArray);
+              $("tbody").empty();
+              $.each(strJsonArray,function (i,n) {
+                  var trbody = '<tr>\n' +
+                      '      <td>'+n.id+'</td>\n' +
+                      '      <td><img src="http://localhost/'+n.picture+'" alt="'+n.name+'" width="120" height="50" /></td>\n' +
+                      '      <td>'+n.bname+'</td>\n' +
+                      '      <td>'+n.description+'</td>\n' +
+                      '      <td>'+n.border+'</td>\n' +
+                      '      <td><div class="button-group">\n' +
+                      '        <a class="button border-main" href="#add"><span class="icon-edit"></span> 修改</a>\n' +
+                      '        <a class="button border-red" href="javascript:void(0)" onclick="return del('+n.id+')"><span class="icon-trash-o"></span> 删除</a>\n' +
+                      '      </div></td>\n' +
+                      '    </tr>';
+                $(".bannerBody").append(trbody);
+              });
+          }
+      })
+  })
+  function del(id){
+      if(confirm("您确定要删除吗?")){
+          var url = "http://localhost:19303/banner/delete/"+id;
+          $.ajax({
+              url:url,
+              type:"DELETE",
+              dataType:'json',
+              success:function (result) {
+                  if(result.code == "success"){
+
+                      alert("删除成功");
+                      window.location.reload();
+                  }
+                  else
+                      alert(result.message);
+              }
+          });
+      }
+
+  }
+</script>
+</body></html>
